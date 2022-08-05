@@ -1,4 +1,4 @@
-FROM python:2-slim-stretch
+FROM python:3-slim-stretch
 
 ENV WEB2PY_ROOT=/opt/web2py
 
@@ -22,6 +22,9 @@ RUN pip install uwsgi psycopg2-binary
 RUN groupadd -g 1000 web2py \
  && useradd -r -u 1000 -g web2py web2py \
  && chown -R web2py:web2py $WEB2PY_ROOT
+
+RUN cd $WEB2PY_ROOT/..
+RUN git clone https://github.com/haimavni/place_stories_server.git
 
 COPY entrypoint.sh /usr/local/bin/
 
