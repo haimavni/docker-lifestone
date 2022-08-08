@@ -1,7 +1,7 @@
 
 build:
 	docker-compose build
-up:
+up: build
 	docker-compose up -d
 start:
 	docker-compose start
@@ -25,4 +25,4 @@ login-db:
 login-api:
 	docker-compose exec api /bin/bash
 db-shell:
-	docker-compose exec database psql -Uadmin
+	docker-compose exec database psql -Upostgres

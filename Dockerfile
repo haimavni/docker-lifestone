@@ -21,9 +21,7 @@ RUN apt-get update && apt-get upgrade && apt-get -y install \
     git \
     libpcre3-dev \
     libpq-dev \
-    build-essential \
-    postgresql \
-    postgresql-client
+    build-essential
     # python2-dev
 RUN curl -sL https://deb.nodesource.com/setup_current.x | sudo -E bash -
 RUN apt-get install -y nodejs
