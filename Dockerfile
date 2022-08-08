@@ -1,6 +1,9 @@
-FROM python:3-slim-stretch
+FROM python:3-slim-buster
 
 ENV WEB2PY_ROOT=/opt/web2py
+ENV APP_LOCATION=/opt/tol_master
+ENV UI_SRC_LOCATION=/opt/aurelia_src
+ENV UI_LOCATION=$APP_LOCATION/static/aurelia
 
 # overridable environment variables
 ENV WEB2PY_VERSION=
@@ -11,21 +14,26 @@ ENV UWSGI_OPTIONS=
 WORKDIR $WEB2PY_ROOT
 COPY app $WEB2PY_ROOT
 
-RUN apt-get update && apt-get -y install \
+RUN apt-get update && apt-get upgrade && apt-get -y install \
+    sudo \
+    curl \
     gcc \
     git \
     libpcre3-dev \
     libpq-dev \
     build-essential \
-    nodejs
+    postgresql \
+    postgresql-client
     # python2-dev
+RUN curl -sL https://deb.nodesource.com/setup_current.x | sudo -E bash -
+RUN apt-get install -y nodejs
 
-#RUN git clone https://github.com/haimavni/lifestone-web2py.git ${WEB2PY_ROOT}
 RUN pip install --upgrade pip
 RUN pip install uwsgi psycopg2-binary 
 RUN pip install beautifulsoup4
 RUN pip install langdetect
 RUN pip install oauthlib
+#failed
 #RUN pip install Pillow
 RUN pip install pybktree
 RUN pip install pycountry
@@ -42,8 +50,22 @@ RUN groupadd -g 1000 web2py \
  && useradd -r -u 1000 -g web2py web2py \
  && chown -R web2py:web2py $WEB2PY_ROOT
 
-RUN git clone https://github.com/haimavni/place_stories_server.git $WEB2PY_ROOT/../tol_master
-RUN git clone https://github.com/haimavni/gbs.git $WEB2PY_ROOT/../aurelia
+RUN git clone https://github.com/haimavni/place_stories_server.git $APP_LOCATION
+RUN git clone https://github.com/haimavni/gbs.git $UI_SRC_LOCATION
+RUN npm install aurelia-cli -g
+RUN cd $UI_SRC_LOCATION
+RUN au install
+RUN au build
+RUN mkdir $UI_LOCATION
+RUN cp $UI_SRC_LOCATION/index.html $UI_LOCATION
+#failed
+# RUN cp -a $UI_SRC_LOCATION/scripts $UI_LOCATION/
+
+#RUN systemctl start postgresql
+#$RUN sudo serivce postgresql start
+#fails because the postgres service is not started
+#RUN sudo -u postgres psql --command="CREATE USER lifestone WITH PASSWORD 'V3geHanu';"
+
 COPY entrypoint.sh /usr/local/bin/
 
 ENTRYPOINT [ "entrypoint.sh" ]
