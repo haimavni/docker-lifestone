@@ -2,7 +2,8 @@
 # this file is released under public domain and you can use without limitations
 
 if MULTI_USER_MODE:
-    db = DAL('sqlite://storage.sqlite')       # if not, use SQLite or other DB
+    # db = DAL('sqlite://storage.sqlite')       # if not, use SQLite or other DB
+    db = DAL('postgres:psycopg2//lifestone:V3geHanu@database/admin', pool_size=50, debug=_debugging, lazy_tables=True)
     from gluon.tools import *
     auth = Auth(
         globals(), db)                      # authentication/authorization
