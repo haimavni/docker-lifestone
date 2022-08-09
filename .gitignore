@@ -4,4 +4,6 @@
 .DS_Store
 .env
 
-/database/
+/database/*
+/app/*
+/app/parameters_8080.py
