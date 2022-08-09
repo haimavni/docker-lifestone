@@ -6,16 +6,18 @@ services:
     restart: always
     environment:
       - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=V3geHanu
+      - POSTGRES_PASSWORD=931632#Ha
     ports:
       - 5432:5432
     volumes:
-      - pgdb:/var/lib/postgresql/data
+      - ./database:/var/lib/postgresql/data
+      - ./db:/docker-entrypoint-initdb.d/
 
   web2py:
     build: .
     volumes:
       - ./app:/opt/web2py
+      - ./db:/docker-entrypoint-initdb.d/
     environment:
       - WEB2PY_PASSWORD=931632
       - WEB2PY_ADMIN_SECURITY_BYPASS=true
