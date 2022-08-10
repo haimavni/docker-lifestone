@@ -1,9 +1,6 @@
 *.log
 *.pyc
-
 .DS_Store
 .env
-
 /database/*
 /app/*
-/app/parameters_8080.py
