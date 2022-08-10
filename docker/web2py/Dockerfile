@@ -33,9 +33,6 @@ RUN pip install beautifulsoup4 langdetect oauthlib pybktree pycountry qrcode red
 #failed?
 RUN pip install Pillow
 
-# RUN git clone --recursive https://github.com/web2py/web2py.git $WEB2PY_ROOT \
-# RUN mv $WEB2PY_ROOT/handlers/wsgihandler.py $WEB2PY_ROOT \
-
 RUN groupadd -g 1000 web2py \
  && useradd -r -u 1000 -g web2py web2py \
  && chown -R web2py:web2py $WEB2PY_ROOT
@@ -48,7 +45,6 @@ RUN npm install
 RUN au build
 RUN mkdir $UI_LOCATION
 RUN cp $UI_SRC_LOCATION/index.html $UI_LOCATION
-#failed
 RUN cp -a $UI_SRC_LOCATION/scripts $UI_LOCATION/
 
 COPY ./docker/web2py/entrypoint.sh /usr/local/bin/
