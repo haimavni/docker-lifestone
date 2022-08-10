@@ -1,7 +1,7 @@
 version: '3.9'
 
 services:
-  database:
+  db:
     build: ./docker/postgres
     environment:
       - POSTGRES_USER=${POSTGRES_USER}
@@ -10,7 +10,7 @@ services:
     ports:
       - 5432:5432
     volumes:
-      - pgdb:/var/lib/postgresql/data
+      - ${PWD}/data:/var/lib/postgresql/data:z
 
   web2py:
     build:
@@ -22,9 +22,9 @@ services:
       - WEB2PY_PASSWORD=${WEB2PY_PASSWORD}
       - WEB2PY_ADMIN_SECURITY_BYPASS=true
     depends_on:
-      - database
+      - db
     links:
-      - database # from inside web2py database host will link us to the database container
+      - db # from inside web2py database host will link us to the database container
 
   nginx:
     build: ./docker/nginx
@@ -41,4 +41,4 @@ volumes:
     driver_opts:
       type: none
       o: bind
-      device: $PWD/database/data
+      device: ${PWD}/database/data
