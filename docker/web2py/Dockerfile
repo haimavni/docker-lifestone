@@ -14,7 +14,9 @@ ENV UWSGI_OPTIONS=
 WORKDIR $WEB2PY_ROOT
 COPY ./app $WEB2PY_ROOT
 
-RUN apt-get update && apt-get upgrade && apt-get -y install \
+RUN apt-get update
+RUN apt-get upgrade -y
+RUN apt-get -y install \
     sudo \
     curl \
     gcc \
@@ -39,8 +41,10 @@ RUN groupadd -g 1000 web2py \
 
 RUN git clone https://github.com/haimavni/place_stories_server.git $APP_LOCATION
 RUN git clone https://github.com/haimavni/gbs.git $UI_SRC_LOCATION
-RUN ln --symbolic -T ../tol_master applications/adm
+WORKDIR $WEB2PY_ROOT/applications
+RUN ln -s ../../tol_master ./adm
 RUN npm install aurelia-cli -g
+RUN cp -a admin ./debug
 WORKDIR $UI_SRC_LOCATION
 RUN npm install
 RUN au build
@@ -49,6 +53,10 @@ RUN cp $UI_SRC_LOCATION/index.html $UI_LOCATION
 RUN cp -a $UI_SRC_LOCATION/scripts $UI_LOCATION/
 
 COPY ./docker/web2py/entrypoint.sh /usr/local/bin/
+
+WORKDIR /opt
+RUN chown -R web2py:web2py .
+WORKDIR $WEB2PY_ROOT
 
 
 ENTRYPOINT [ "entrypoint.sh" ]
