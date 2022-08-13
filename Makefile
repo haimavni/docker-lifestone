@@ -24,5 +24,7 @@ login-db:
 	docker-compose exec database /bin/bash
 login-api:
 	docker-compose exec api /bin/bash
-db-shell:
-	docker-compose exec database psql -Upostgres
+db:
+	docker-compose exec db psql -Upostgres
+py:
+	docker-compose exec web2py /bin/bash

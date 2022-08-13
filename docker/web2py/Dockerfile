@@ -42,7 +42,7 @@ RUN groupadd -g 1000 web2py \
 RUN git clone https://github.com/haimavni/place_stories_server.git $APP_LOCATION
 RUN git clone https://github.com/haimavni/gbs.git $UI_SRC_LOCATION
 WORKDIR $WEB2PY_ROOT/applications
-RUN ln -s ../../tol_master ./adm
+RUN ["ln", "-sf", "../../tol_master", "./adm"]
 RUN npm install aurelia-cli -g
 RUN cp -a admin ./debug
 WORKDIR $UI_SRC_LOCATION

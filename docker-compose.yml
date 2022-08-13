@@ -11,7 +11,8 @@ services:
       - 5432:5432
     volumes:
       - ${PWD}/db_data:/var/lib/postgresql/data:z
-
+      - ${PWD}/db_init/init.sql:/docker-entrypoint-initdb.d/init.sql
+      # above has no effect...
   web2py:
     build:
       context: ./
