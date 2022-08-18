@@ -5,3 +5,6 @@
 /database/*
 /app/*
 */databases/*
+/apps_data/*
+tolife_client
+tolife_server

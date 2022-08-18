@@ -23,6 +23,9 @@ services:
     environment:
       - WEB2PY_PASSWORD=${WEB2PY_PASSWORD}
       - WEB2PY_ADMIN_SECURITY_BYPASS=true
+      - DB_USER=${POSTGRES_USER}
+      - DB_PASSWORD=${POSTGRES_PASSWORD}
+      - DB_HOST=db:5432
     depends_on:
       - db
     links:

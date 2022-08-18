@@ -4,6 +4,8 @@ ENV WEB2PY_ROOT=/opt/web2py
 ENV APP_LOCATION=/opt/tol_master
 ENV UI_SRC_LOCATION=/opt/aurelia_src
 ENV UI_LOCATION=$APP_LOCATION/static/aurelia
+ENV POSTGRES_USER=${POSTGRES_USER}
+ENV POSTGRES_USER_PASSWORD=${POSTGRES_USER_PASSWORD}
 
 # overridable environment variables
 ENV WEB2PY_VERSION=
@@ -26,12 +28,13 @@ RUN apt-get -y install \
     build-essential
     # python2-dev
 
-RUN curl -sL https://deb.nodesource.com/setup_14.x | sudo -E bash -
+RUN curl -sL https://deb.nodesource.com/setup_16.x | sudo -E bash -
 RUN apt-get install -y nodejs
 
 RUN pip install --upgrade pip
 RUN pip install uwsgi psycopg2-binary 
-RUN pip install beautifulsoup4 langdetect oauthlib pybktree pycountry qrcode redmail requests simplejson tornado websockets youtube-dl
+RUN pip install beautifulsoup4 langdetect oauthlib pybktree pycountry qrcode redmail requests simplejson tornado websockets youtube-dl psutil
+RUN pio install pdf2image pdfplumber bs4 dhash
 #failed?
 RUN pip install Pillow
 
@@ -41,6 +44,9 @@ RUN groupadd -g 1000 web2py \
 
 RUN git clone https://github.com/haimavni/place_stories_server.git $APP_LOCATION
 RUN git clone https://github.com/haimavni/gbs.git $UI_SRC_LOCATION
+#use new sass preprocessor
+WORKDIR $UI_SRC_LOCATION
+RUN git checkout dart
 WORKDIR $WEB2PY_ROOT/applications
 RUN ["ln", "-sf", "../../tol_master", "./adm"]
 RUN npm install aurelia-cli -g
@@ -56,6 +62,9 @@ COPY ./docker/web2py/entrypoint.sh /usr/local/bin/
 
 WORKDIR /opt
 RUN chown -R web2py:web2py .
+WORKDIR /apps_data
+RUN chown -R web2py:web2py .
+
 WORKDIR $WEB2PY_ROOT
 
 
