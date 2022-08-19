@@ -25,7 +25,8 @@ RUN apt-get -y install \
     git \
     libpcre3-dev \
     libpq-dev \
-    build-essential
+    build-essential \
+    nano
     # python2-dev
 
 RUN curl -sL https://deb.nodesource.com/setup_16.x | sudo -E bash -
@@ -34,7 +35,7 @@ RUN apt-get install -y nodejs
 RUN pip install --upgrade pip
 RUN pip install uwsgi psycopg2-binary 
 RUN pip install beautifulsoup4 langdetect oauthlib pybktree pycountry qrcode redmail requests simplejson tornado websockets youtube-dl psutil
-RUN pio install pdf2image pdfplumber bs4 dhash
+RUN pip install pdf2image pdfplumber bs4 dhash
 #failed?
 RUN pip install Pillow
 
@@ -42,8 +43,11 @@ RUN groupadd -g 1000 web2py \
  && useradd -r -u 1000 -g web2py web2py \
  && chown -R web2py:web2py $WEB2PY_ROOT
 
+#RUN rm -rf $APP_LOCATION
 RUN git clone https://github.com/haimavni/place_stories_server.git $APP_LOCATION
 RUN git clone https://github.com/haimavni/gbs.git $UI_SRC_LOCATION
+WORKDIR $APP_LOCATION
+RUN ["ln", "-sf", "/apps_data/databases", "./databases"]
 #use new sass preprocessor
 WORKDIR $UI_SRC_LOCATION
 RUN git checkout dart
