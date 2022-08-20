@@ -47,6 +47,7 @@ RUN groupadd -g 1000 web2py \
 RUN git clone https://github.com/haimavni/place_stories_server.git $APP_LOCATION
 RUN git clone https://github.com/haimavni/gbs.git $UI_SRC_LOCATION
 WORKDIR $APP_LOCATION
+RUN ["ln", "-sf", "$UI_SRC_LOCATION", "$UI_LOCATION"]
 RUN ["ln", "-sf", "/apps_data/databases", "./databases"]
 #use new sass preprocessor
 WORKDIR $UI_SRC_LOCATION
@@ -58,11 +59,11 @@ RUN cp -a admin ./debug
 WORKDIR $UI_SRC_LOCATION
 RUN npm install
 RUN au build
-RUN mkdir $UI_LOCATION
-RUN cp $UI_SRC_LOCATION/index.html $UI_LOCATION
-RUN cp -a $UI_SRC_LOCATION/scripts $UI_LOCATION/
-WORKDIR $UI_LOCATION
-COPY ./fontawesome ./fontawesome
+# RUN mkdir $UI_LOCATION
+# RUN cp $UI_SRC_LOCATION/index.html $UI_LOCATION
+# RUN cp -a $UI_SRC_LOCATION/scripts $UI_LOCATION/
+#WORKDIR $UI_LOCATION
+#COPY ./fontawesome ./fontawesome
 
 COPY ./docker/web2py/entrypoint.sh /usr/local/bin/
 
