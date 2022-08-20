@@ -28,3 +28,5 @@ db:
 	docker-compose exec db psql -Upostgres
 py:
 	docker-compose exec web2py /bin/bash
+root:
+	docker-compose exec -u 0 web2py /bin/bash

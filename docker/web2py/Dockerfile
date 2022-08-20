@@ -61,6 +61,8 @@ RUN au build
 RUN mkdir $UI_LOCATION
 RUN cp $UI_SRC_LOCATION/index.html $UI_LOCATION
 RUN cp -a $UI_SRC_LOCATION/scripts $UI_LOCATION/
+WORKDIR $UI_LOCATION
+COPY ./fontawesome ./fontawesome
 
 COPY ./docker/web2py/entrypoint.sh /usr/local/bin/
 
@@ -70,7 +72,6 @@ WORKDIR /apps_data
 RUN chown -R web2py:web2py .
 
 WORKDIR $WEB2PY_ROOT
-
 
 ENTRYPOINT [ "entrypoint.sh" ]
 CMD [ "http" ]
